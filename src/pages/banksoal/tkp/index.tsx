@@ -233,9 +233,9 @@ export const TKPPage = () => {
       <Box sx={{ mb: 2 }}>
         <Typography variant="h4" fontWeight={700}>
           Bank Soal TKP
-          <Typography variant="caption" ml={1}>
-            Mengukur karakteristik pribadi, sikap, dan perilaku peserta yang relevan dengan tugas dan fungsi ASN.
-          </Typography>
+        </Typography>
+        <Typography variant="caption">
+          Tes Karakteristik Pribadi Mengukur karakteristik pribadi, sikap, dan perilaku peserta yang relevan dengan tugas dan fungsi ASN.
         </Typography>
 
         <Box display="flex" alignItems="end" gap={1} my={2}>

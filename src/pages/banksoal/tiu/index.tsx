@@ -220,9 +220,9 @@ export const TIUPage = () => {
       <Box sx={{ mb: 2 }}>
         <Typography variant="h4" fontWeight={700}>
           Bank Soal TIU
-          <Typography variant="caption" ml={1}>
-            Mengukur kemampuan verbal, numerik, dan figural peserta dalam memahami, menganalisis, dan menyelesaikan masalah.
-          </Typography>
+        </Typography>
+        <Typography variant="caption">
+          Tes Intelegensia Umum Mengukur kemampuan verbal, numerik, dan figural peserta dalam memahami, menganalisis, dan menyelesaikan masalah.
         </Typography>
 
         <Box display="flex" alignItems="end" gap={1} my={2}>

@@ -220,9 +220,9 @@ export const TWKPage = () => {
       <Box sx={{ mb: 2 }}>
         <Typography variant="h4" fontWeight={700}>
           Bank Soal TWK
-          <Typography variant="caption" ml={1}>
-            Menguji pengetahuan tentang nilai-nilai kebangsaan, Pancasila, UUD 1945, NKRI, dan Bhineka Tunggal Ika.
-          </Typography>
+        </Typography>
+        <Typography variant="caption">
+          Tes Wawasan Kebangsaan Menguji pengetahuan tentang nilai-nilai kebangsaan, Pancasila, UUD 1945, NKRI, dan Bhineka Tunggal Ika.
         </Typography>
 
         <Box display="flex" alignItems="end" gap={1} my={2}>
