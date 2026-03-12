@@ -130,8 +130,13 @@ export const TKPPage = () => {
   };
 
   const formatOptionScore = (option: TKPOption) => {
+    return `${(option.label ?? "-").toUpperCase()}. ${option.score ?? "-"} Point: ${option.text ?? "-"}`;
+  };
+
+    const formatOptionScoreTable = (option: TKPOption) => {
     return `${(option.label ?? "-").toUpperCase()}: ${option.score ?? "-"} Point`;
   };
+
 
   const handleAdd = () => {
     alert("Tambah soal belum diimplementasikan.");
@@ -201,7 +206,7 @@ export const TKPPage = () => {
                 <TableRow>
                   <TableCell sx={{ width: 50, fontWeight: 700, color: "background.default" }}>No</TableCell>
                   <TableCell sx={{ fontWeight: 700, color: "background.default" }}>Soal</TableCell>
-                  <TableCell sx={{ width: 160, fontWeight: 700, color: "background.default" }}>Jawaban</TableCell>
+                  <TableCell sx={{ width: 320, fontWeight: 700, color: "background.default" }}>Jawaban</TableCell>
                   <TableCell align="center" sx={{ width: 150, fontWeight: 700, color: "background.default" }}>
                     Action
                   </TableCell>
@@ -217,7 +222,7 @@ export const TKPPage = () => {
                         {item.options?.length ? (
                           item.options.map((option, optionIndex) => (
                             <Typography key={`tkp-option-${index}-${optionIndex}`} variant="body2">
-                              {formatOptionScore(option)}
+                              {formatOptionScoreTable(option)}
                             </Typography>
                           ))
                         ) : (
