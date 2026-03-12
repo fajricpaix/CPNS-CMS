@@ -1,71 +1,75 @@
-import { 
-    Refine,
-    GitHubBanner, 
-    WelcomePage,
-    Authenticated, 
+import {
+  Refine,
 } from '@refinedev/core';
 import { DevtoolsPanel, DevtoolsProvider } from "@refinedev/devtools";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
-    import { AuthPage,ErrorComponent
-,useNotificationProvider
-,RefineSnackbarProvider
-,ThemedLayout} from '@refinedev/mui';
+import { RefineSnackbarProvider, useNotificationProvider } from '@refinedev/mui';
 
 import CssBaseline from "@mui/material/CssBaseline";
 import GlobalStyles from "@mui/material/GlobalStyles";
-import { BrowserRouter, Route, Routes, Outlet } from "react-router";
-import routerProvider, { NavigateToResource, CatchAllNavigate, UnsavedChangesNotifier, DocumentTitleHandler } from "@refinedev/react-router";
-import { dataProvider } from "./providers/data";
+import { Box, Typography } from "@mui/material";
+import routerProvider, { DocumentTitleHandler, UnsavedChangesNotifier } from "@refinedev/react-router";
+import { BrowserRouter, Route, Routes } from "react-router";
 import { ColorModeContextProvider } from "./contexts/color-mode";
-import { Header } from "./components/header";
+import { dataProvider } from "./providers/data";
+import { CustomSidebar } from "./components/layout/Sidebar";
+import { TIUPage } from "./pages/banksoal/tiu";
 
-
-
-
+const Screen = ({ title }: { title: string }) => (
+  <Box sx={{ p: 4 }}>
+    <Typography variant="h4" fontWeight={700} mb={1}>
+      {title}
+    </Typography>
+    <Typography variant="body1" color="text.secondary">
+      Halaman {title}
+    </Typography>
+  </Box>
+);
 
 function App() {
-    
-
-    
-    
-    return (
-        <BrowserRouter>
-        <GitHubBanner />
-        <RefineKbarProvider>
-            <ColorModeContextProvider>
-<CssBaseline />
-<GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
-<RefineSnackbarProvider>
+  return (
+    <BrowserRouter>
+      <RefineKbarProvider>
+        <ColorModeContextProvider>
+          <CssBaseline />
+          <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
+          <RefineSnackbarProvider>
             <DevtoolsProvider>
-                <Refine dataProvider={dataProvider}
-notificationProvider={useNotificationProvider}
-routerProvider={routerProvider} 
-                    options={{
-                        syncWithLocation: true,
-                        warnWhenUnsavedChanges: true,
-                            projectId: "baB6Zh-ZCiWV0-aWjATw",
-                        
-                    }}
-                >
+              <Refine dataProvider={dataProvider}
+                notificationProvider={useNotificationProvider}
+                routerProvider={routerProvider}
+                options={{
+                  syncWithLocation: true,
+                  warnWhenUnsavedChanges: true,
+                  projectId: "baB6Zh-ZCiWV0-aWjATw",
+                }}>
 
-
-                        <Routes>
-                            <Route index element={<WelcomePage />} />
-                        </Routes>
-                    <RefineKbar />
-                    <UnsavedChangesNotifier />
-                    <DocumentTitleHandler />
-                </Refine>
-            <DevtoolsPanel />
+                <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" }}>
+                  <CustomSidebar />
+                  <Box sx={{ flex: 1 }}>
+                    <Routes>
+                      <Route index element={<Screen title="Dashboard" />} />
+                      <Route path="/banksoal" element={<Screen title="Bank Soal" />} />
+                      <Route path="/banksoal/tkp" element={<Screen title="TKP" />} />
+                      <Route path="/banksoal/tiu" element={<TIUPage />} />
+                      <Route path="/banksoal/twk" element={<Screen title="TWK" />} />
+                      <Route path="/member-management" element={<Screen title="Member Management" />} />
+                    </Routes>
+                  </Box>
+                </Box>
+                <RefineKbar />
+                <UnsavedChangesNotifier />
+                <DocumentTitleHandler />
+              </Refine>
+              <DevtoolsPanel />
             </DevtoolsProvider>
-            </RefineSnackbarProvider>
+          </RefineSnackbarProvider>
 
-
-</ColorModeContextProvider>
-        </RefineKbarProvider>
-        </BrowserRouter>
-      );
+        </ColorModeContextProvider>
+      </RefineKbarProvider>
+    </BrowserRouter>
+  );
 };
 
 export default App;
