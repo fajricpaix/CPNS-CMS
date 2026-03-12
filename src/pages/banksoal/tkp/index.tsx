@@ -7,14 +7,7 @@ import {
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
-  List,
-  ListItem,
-  ListItemText,
   Paper,
   Stack,
   Table,
@@ -29,7 +22,9 @@ import {
   TKPFormData,
   TKPFormDialog,
   getInitialTKPFormData,
-} from "@components/banksoal/TKPFormDialog";
+} from "@components/ui/popup/TKPFormDialog";
+import { DeleteConfirmDialog } from "@components/ui/popup/DeleteConfirmDialog";
+import { TKPDetailDialog } from "@components/ui/popup/TKPDetailDialog";
 
 type TKPOption = {
   label?: string;
@@ -157,11 +152,7 @@ export const TKPPage = () => {
     return question.text ?? "-";
   };
 
-  const formatOptionScore = (option: TKPOption) => {
-    return `${(option.label ?? "-").toUpperCase()}. ${option.score ?? "-"} Point: ${option.text ?? "-"}`;
-  };
-
-    const formatOptionScoreTable = (option: TKPOption) => {
+  const formatOptionScoreTable = (option: TKPOption) => {
     return `${(option.label ?? "-").toUpperCase()}: ${option.score ?? "-"} Point`;
   };
 
@@ -239,11 +230,15 @@ export const TKPPage = () => {
 
   return (
     <Box sx={{ p: 4 }}>
-      <Box sx={{ mb: 2.5 }}>
-        <Typography variant="h4" fontWeight={700} mb={1}>
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="h4" fontWeight={700}>
           Bank Soal TKP
+          <Typography variant="caption" ml={1}>
+            Mengukur karakteristik pribadi, sikap, dan perilaku peserta yang relevan dengan tugas dan fungsi ASN.
+          </Typography>
         </Typography>
-        <Button variant="text" startIcon={<AddIcon />} onClick={handleAdd}>
+        <Typography variant="body1" mb={2}>Jumlah Soal : {questions.length}</Typography>
+        <Button variant="text" sx={{ mb: 2 }} startIcon={<AddIcon />} onClick={handleAdd}>
           Tambah Soal
         </Button>
       </Box>
@@ -264,7 +259,7 @@ export const TKPPage = () => {
                 <TableRow>
                   <TableCell sx={{ width: 50, fontWeight: 700, color: "background.default" }}>No</TableCell>
                   <TableCell sx={{ fontWeight: 700, color: "background.default" }}>Soal</TableCell>
-                  <TableCell sx={{ width: 320, fontWeight: 700, color: "background.default" }}>Jawaban</TableCell>
+                  <TableCell sx={{ width: 150, fontWeight: 700, color: "background.default" }}>Jawaban</TableCell>
                   <TableCell align="center" sx={{ width: 150, fontWeight: 700, color: "background.default" }}>
                     Action
                   </TableCell>
@@ -311,63 +306,19 @@ export const TKPPage = () => {
               : `Semua soal sudah dimuat (${questions.length})`}
           </Box>
 
-          <Dialog open={detailOpen} onClose={handleCloseDetail} fullWidth maxWidth="md">
-            <DialogTitle>
-              Soal TKP {selectedIndex !== null ? `No. ${selectedIndex + 1}` : ""}
-            </DialogTitle>
-            <DialogContent dividers>
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Soal
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                {getQuestionText(selectedQuestion?.question)}
-              </Typography>
+          <TKPDetailDialog
+            open={detailOpen}
+            title={`Soal TKP ${selectedIndex !== null ? `No. ${selectedIndex + 1}` : ""}`}
+            questionText={getQuestionText(selectedQuestion?.question)}
+            options={selectedQuestion?.options}
+            onClose={handleCloseDetail}
+          />
 
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Pilihan Jawaban dan Skor
-              </Typography>
-              {selectedQuestion?.options?.length ? (
-                <List dense sx={{ pt: 0, mb: 2 }}>
-                  {selectedQuestion.options.map((option, optionIndex) => (
-                    <ListItem key={`option-${optionIndex}`} sx={{ px: 0 }}>
-                      <ListItemText primary={formatOptionScore(option)} />
-                    </ListItem>
-                  ))}
-                </List>
-              ) : (
-                <Typography variant="body2" sx={{ mb: 2 }}>
-                  -
-                </Typography>
-              )}
-
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Pembahasan
-              </Typography>
-              <Typography variant="body2" sx={{ whiteSpace: "pre-line" }}>
-                {selectedQuestion?.explanation ?? "-"}
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button color="inherit" onClick={handleCloseDetail}>Tutup</Button>
-            </DialogActions>
-          </Dialog>
-
-          <Dialog open={deleteOpen} onClose={handleCloseDelete} fullWidth maxWidth="xs">
-            <DialogTitle>Konfirmasi Hapus</DialogTitle>
-            <DialogContent dividers>
-              <Typography variant="body2">
-                Apakah Anda yakin ingin menghapus soal ini?
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDelete} color="inherit">
-                Batal
-              </Button>
-              <Button color="error" variant="contained" onClick={handleConfirmDelete}>
-                Hapus
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <DeleteConfirmDialog
+            open={deleteOpen}
+            onClose={handleCloseDelete}
+            onConfirm={handleConfirmDelete}
+          />
 
           {/* Form Dialog: Add / Edit */}
           <TKPFormDialog

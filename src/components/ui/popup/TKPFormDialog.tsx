@@ -23,7 +23,7 @@ export type TKPFormData = {
   explanation: string;
 };
 
-export const DEFAULT_TKP_LABELS = ["a", "b", "c", "d", "e"];
+export const DEFAULT_TKP_LABELS = ["A", "B", "C", "D", "E"];
 
 export const getInitialTKPFormData = (): TKPFormData => ({
   questionText: "",

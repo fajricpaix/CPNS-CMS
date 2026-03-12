@@ -7,14 +7,7 @@ import {
   Box,
   Button,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   IconButton,
-  List,
-  ListItem,
-  ListItemText,
   Paper,
   Table,
   TableBody,
@@ -28,7 +21,9 @@ import {
   QuestionFormData,
   QuestionFormDialog,
   getInitialQuestionFormData,
-} from "@components/banksoal/QuestionFormDialog";
+} from "@components/ui/popup/QuestionFormDialog";
+import { ChoiceQuestionDetailDialog } from "@components/ui/popup/ChoiceQuestionDetailDialog";
+import { DeleteConfirmDialog } from "@components/ui/popup/DeleteConfirmDialog";
 
 type TIUQuestion = {
   answer?: string;
@@ -222,11 +217,15 @@ export const TIUPage = () => {
 
   return (
     <Box sx={{ p: 4 }}>
-      <Box sx={{ mb: 2.5 }}>
-        <Typography variant="h4" fontWeight={700} mb={1}>
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="h4" fontWeight={700}>
           Bank Soal TIU
+          <Typography variant="caption" ml={1}>
+            Mengukur kemampuan verbal, numerik, dan figural peserta dalam memahami, menganalisis, dan menyelesaikan masalah.
+          </Typography>
         </Typography>
-        <Button variant="text" startIcon={<AddIcon />} onClick={handleAdd}>
+        <Typography variant="body1" mb={2}>Jumlah Soal : {questions.length}</Typography>
+        <Button variant="text" sx={{ mb: 2 }} startIcon={<AddIcon />} onClick={handleAdd}>
           Tambah Soal
         </Button>
       </Box>
@@ -282,77 +281,21 @@ export const TIUPage = () => {
               : `Semua soal sudah dimuat (${questions.length})`}
           </Box>
 
-          <Dialog
+          <ChoiceQuestionDetailDialog
             open={detailOpen}
+            title={`Soal TIU ${selectedIndex !== null ? `No. ${selectedIndex + 1}` : ""}`}
+            questionText={getQuestionText(selectedQuestion?.question)}
+            options={selectedQuestion?.options}
+            answer={selectedQuestion?.answer}
+            explanation={selectedQuestion?.explanation}
             onClose={handleCloseDetail}
-            fullWidth
-            maxWidth="md"
-          >
-            <DialogTitle>
-              Soal TIU {selectedIndex !== null ? `No. ${selectedIndex + 1}` : ""}
-            </DialogTitle>
-            <DialogContent dividers>
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Soal
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                {getQuestionText(selectedQuestion?.question)}
-              </Typography>
+          />
 
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Pilihan Jawaban
-              </Typography>
-              {selectedQuestion?.options?.length ? (
-                <List dense sx={{ pt: 0, mb: 2 }}>
-                  {selectedQuestion.options.map((option, optionIndex) => (
-                    <ListItem key={`option-${optionIndex}`} sx={{ px: 0 }}>
-                      <ListItemText
-                        primary={`${(option.label ?? "").toUpperCase()}. ${option.text ?? "-"}`}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
-              ) : (
-                <Typography variant="body2" sx={{ mb: 2 }}>
-                  -
-                </Typography>
-              )}
-
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Jawaban
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2, fontWeight: 700 }}>
-                {selectedQuestion?.answer ?? "-"}
-              </Typography>
-
-              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                Pembahasan
-              </Typography>
-              <Typography variant="body2" sx={{ whiteSpace: "pre-line" }}>
-                {selectedQuestion?.explanation ?? "-"}
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button color="inherit" onClick={handleCloseDetail}>Tutup</Button>
-            </DialogActions>
-          </Dialog>
-
-          <Dialog open={deleteOpen} onClose={handleCloseDelete} fullWidth maxWidth="xs">
-            <DialogTitle>Konfirmasi Hapus</DialogTitle>
-            <DialogContent dividers>
-              <Typography variant="body2">
-                Apakah Anda yakin ingin menghapus soal ini?
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseDelete} color="inherit">
-                Batal
-              </Button>
-              <Button color="error" variant="contained" onClick={handleConfirmDelete}>
-                Hapus
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <DeleteConfirmDialog
+            open={deleteOpen}
+            onClose={handleCloseDelete}
+            onConfirm={handleConfirmDelete}
+          />
 
           {/* Form Dialog: Add / Edit */}
           <QuestionFormDialog
