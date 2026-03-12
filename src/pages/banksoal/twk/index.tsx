@@ -224,7 +224,9 @@ export const TWKPage = () => {
             Menguji pengetahuan tentang nilai-nilai kebangsaan, Pancasila, UUD 1945, NKRI, dan Bhineka Tunggal Ika.
           </Typography>
         </Typography>
-        <Typography variant="body1" mb={2}>Jumlah Soal : {questions.length}</Typography>
+        <Typography variant="body1" display="flex" gap={1} my={2}>
+          Jumlah Soal : <Typography sx={{ px: 1, backgroundColor: 'primary.main', color: 'background.default', borderRadius: 6 }}>{questions.length}</Typography>
+        </Typography>
         <Button variant="text" sx={{ mb: 2 }} startIcon={<AddIcon />} onClick={handleAdd}>
           Tambah Soal
         </Button>

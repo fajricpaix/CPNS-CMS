@@ -43,7 +43,7 @@ export const CustomSidebar = () => {
     {
       label: "Bank Soal",
       icon: <PeopleOutlinedIcon />,
-      onClick: () => go({ to: "/banksoal" }),
+      onClick: () => go({ to: "/banksoal/twk" }),
       path: "/banksoal",
     },
     {

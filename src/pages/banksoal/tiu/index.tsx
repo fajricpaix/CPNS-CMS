@@ -224,7 +224,9 @@ export const TIUPage = () => {
             Mengukur kemampuan verbal, numerik, dan figural peserta dalam memahami, menganalisis, dan menyelesaikan masalah.
           </Typography>
         </Typography>
-        <Typography variant="body1" mb={2}>Jumlah Soal : {questions.length}</Typography>
+        <Typography variant="body1" display="flex" gap={1} my={2}>
+          Jumlah Soal : <Typography sx={{ px: 1, backgroundColor: 'primary.main', color: 'background.default', borderRadius: 6 }}>{questions.length}</Typography>
+        </Typography>
         <Button variant="text" sx={{ mb: 2 }} startIcon={<AddIcon />} onClick={handleAdd}>
           Tambah Soal
         </Button>

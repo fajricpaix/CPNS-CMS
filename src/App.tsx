@@ -17,6 +17,8 @@ import { CustomSidebar } from "./components/layout/Sidebar";
 import { TKPPage } from "./pages/banksoal/tkp";
 import { TIUPage } from "./pages/banksoal/tiu";
 import { TWKPage } from "./pages/banksoal/twk";
+import { BankSoalPage } from "./pages/banksoal";
+import { Dashboard } from '@pages/dashboard';
 
 const Screen = ({ title }: { title: string }) => (
   <Box sx={{ p: 4 }}>
@@ -51,8 +53,8 @@ function App() {
                   <CustomSidebar />
                   <Box sx={{ flex: 1 }}>
                     <Routes>
-                      <Route index element={<Screen title="Dashboard" />} />
-                      <Route path="/banksoal" element={<Screen title="Bank Soal" />} />
+                      <Route index element={<Dashboard />} />
+                      {/* <Route path="/banksoal" element={<BankSoalPage />} /> */}
                       <Route path="/banksoal/tkp" element={<TKPPage />} />
                       <Route path="/banksoal/tiu" element={<TIUPage />} />
                       <Route path="/banksoal/twk" element={<TWKPage />} />
