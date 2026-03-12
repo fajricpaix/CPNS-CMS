@@ -237,9 +237,14 @@ export const TKPPage = () => {
             Mengukur karakteristik pribadi, sikap, dan perilaku peserta yang relevan dengan tugas dan fungsi ASN.
           </Typography>
         </Typography>
-        <Typography variant="body1" display="flex" gap={1} my={2}>
-          Jumlah Soal : <Typography sx={{ px: 1, backgroundColor: 'primary.main', color: 'background.default', borderRadius: 6 }}>{questions.length}</Typography>
-        </Typography>
+
+        <Box display="flex" alignItems="end" gap={1} my={2}>
+          <Typography sx={{ px: 1, backgroundColor: 'primary.main', color: 'background.default', fontSize: 36 }}>{questions.length}</Typography>
+          <Typography variant="body1">
+            Total Soal 
+          </Typography>
+        </Box>
+
         <Button variant="text" sx={{ mb: 2 }} startIcon={<AddIcon />} onClick={handleAdd}>
           Tambah Soal
         </Button>
