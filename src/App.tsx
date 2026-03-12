@@ -14,6 +14,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { ColorModeContextProvider } from "./contexts/color-mode";
 import { dataProvider } from "./providers/data";
 import { CustomSidebar } from "./components/layout/Sidebar";
+import { TKPPage } from "./pages/banksoal/tkp";
 import { TIUPage } from "./pages/banksoal/tiu";
 import { TWKPage } from "./pages/banksoal/twk";
 
@@ -52,7 +53,7 @@ function App() {
                     <Routes>
                       <Route index element={<Screen title="Dashboard" />} />
                       <Route path="/banksoal" element={<Screen title="Bank Soal" />} />
-                      <Route path="/banksoal/tkp" element={<Screen title="TKP" />} />
+                      <Route path="/banksoal/tkp" element={<TKPPage />} />
                       <Route path="/banksoal/tiu" element={<TIUPage />} />
                       <Route path="/banksoal/twk" element={<TWKPage />} />
                       <Route path="/member-management" element={<Screen title="Member Management" />} />
