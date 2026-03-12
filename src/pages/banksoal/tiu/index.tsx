@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
+import RemoveRedEyeRoundedIcon from "@mui/icons-material/RemoveRedEyeRounded";
 import {
   Box,
   Button,
@@ -24,6 +24,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import {
+  QuestionFormData,
+  QuestionFormDialog,
+  getInitialQuestionFormData,
+} from "@components/banksoal/QuestionFormDialog";
 
 type TIUQuestion = {
   answer?: string;
@@ -39,6 +44,23 @@ type DummyJson = {
   }>;
 };
 
+const questionToFormData = (q: TIUQuestion): QuestionFormData => ({
+  questionText: typeof q.question === "string" ? q.question : (q.question?.text ?? ""),
+  options:
+    q.options?.length
+      ? q.options.map((o) => ({ label: o.label ?? "", text: o.text ?? "" }))
+      : [{ label: "", text: "" }],
+  answer: q.answer ?? "",
+  explanation: q.explanation ?? "",
+});
+
+const formDataToQuestion = (f: QuestionFormData): TIUQuestion => ({
+  question: { text: f.questionText },
+  options: f.options.map((o) => ({ label: o.label, text: o.text })),
+  answer: f.answer,
+  explanation: f.explanation,
+});
+
 const INITIAL_LOAD = 15;
 const LOAD_MORE = 10;
 
@@ -49,6 +71,10 @@ export const TIUPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
+  const [formMode, setFormMode] = useState<"add" | "edit">("add");
+  const [formData, setFormData] = useState<QuestionFormData>(getInitialQuestionFormData());
+  const [formEditIndex, setFormEditIndex] = useState<number | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<TIUQuestion | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
@@ -124,7 +150,37 @@ export const TIUPage = () => {
   };
 
   const handleAdd = () => {
-    alert("Tambah soal belum diimplementasikan.");
+    setFormMode("add");
+    setFormData(getInitialQuestionFormData());
+    setFormEditIndex(null);
+    setFormOpen(true);
+  };
+
+  const handleEdit = (index: number) => {
+    const q = visibleQuestions[index];
+    if (!q) return;
+    setFormMode("edit");
+    setFormData(questionToFormData(q));
+    setFormEditIndex(index);
+    setFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setFormOpen(false);
+    setFormEditIndex(null);
+    setFormData(getInitialQuestionFormData());
+  };
+
+  const handleSaveForm = () => {
+    const newQuestion = formDataToQuestion(formData);
+    if (formMode === "add") {
+      setQuestions((prev) => [...prev, newQuestion]);
+    } else if (formMode === "edit" && formEditIndex !== null) {
+      setQuestions((prev) =>
+        prev.map((q, i) => (i === formEditIndex ? newQuestion : q))
+      );
+    }
+    handleCloseForm();
   };
 
   const handleView = (index: number) => {
@@ -207,7 +263,7 @@ export const TIUPage = () => {
                       <IconButton color="info" size="small" onClick={() => handleView(index)}>
                         <RemoveRedEyeRoundedIcon fontSize="small" />
                       </IconButton>
-                      <IconButton size="small">
+                      <IconButton size="small" onClick={() => handleEdit(index)}>
                         <EditIcon fontSize="small" />
                       </IconButton>
                       <IconButton color="error" size="small" onClick={() => handleDelete(index)}>
@@ -297,6 +353,17 @@ export const TIUPage = () => {
               </Button>
             </DialogActions>
           </Dialog>
+
+          {/* Form Dialog: Add / Edit */}
+          <QuestionFormDialog
+            open={formOpen}
+            mode={formMode}
+            title="Soal TIU"
+            formData={formData}
+            onChange={setFormData}
+            onClose={handleCloseForm}
+            onSave={handleSaveForm}
+          />
         </>
       )}
     </Box>

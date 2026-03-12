@@ -25,6 +25,11 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import {
+  TKPFormData,
+  TKPFormDialog,
+  getInitialTKPFormData,
+} from "@components/banksoal/TKPFormDialog";
 
 type TKPOption = {
   label?: string;
@@ -45,6 +50,25 @@ type DummyJson = {
   }>;
 };
 
+const questionToFormData = (q: TKPQuestion): TKPFormData => ({
+  questionText: typeof q.question === "string" ? q.question : (q.question?.text ?? ""),
+  options:
+    q.options?.length
+      ? q.options.map((o) => ({ label: o.label ?? "", score: o.score !== undefined ? String(o.score) : "", text: o.text ?? "" }))
+      : [{ label: "", score: "", text: "" }],
+  explanation: q.explanation ?? "",
+});
+
+const formDataToQuestion = (f: TKPFormData): TKPQuestion => ({
+  question: { text: f.questionText },
+  options: f.options.map((o) => ({
+    label: o.label,
+    score: o.score !== "" ? Number(o.score) : undefined,
+    text: o.text,
+  })),
+  explanation: f.explanation,
+});
+
 const INITIAL_LOAD = 15;
 const LOAD_MORE = 10;
 
@@ -55,6 +79,10 @@ export const TKPPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
+  const [formMode, setFormMode] = useState<"add" | "edit">("add");
+  const [formData, setFormData] = useState<TKPFormData>(getInitialTKPFormData());
+  const [formEditIndex, setFormEditIndex] = useState<number | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<TKPQuestion | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
@@ -139,7 +167,37 @@ export const TKPPage = () => {
 
 
   const handleAdd = () => {
-    alert("Tambah soal belum diimplementasikan.");
+    setFormMode("add");
+    setFormData(getInitialTKPFormData());
+    setFormEditIndex(null);
+    setFormOpen(true);
+  };
+
+  const handleEdit = (index: number) => {
+    const q = visibleQuestions[index];
+    if (!q) return;
+    setFormMode("edit");
+    setFormData(questionToFormData(q));
+    setFormEditIndex(index);
+    setFormOpen(true);
+  };
+
+  const handleCloseForm = () => {
+    setFormOpen(false);
+    setFormEditIndex(null);
+    setFormData(getInitialTKPFormData());
+  };
+
+  const handleSaveForm = () => {
+    const newQuestion = formDataToQuestion(formData);
+    if (formMode === "add") {
+      setQuestions((prev) => [...prev, newQuestion]);
+    } else if (formMode === "edit" && formEditIndex !== null) {
+      setQuestions((prev) =>
+        prev.map((q, i) => (i === formEditIndex ? newQuestion : q))
+      );
+    }
+    handleCloseForm();
   };
 
   const handleView = (index: number) => {
@@ -234,7 +292,7 @@ export const TKPPage = () => {
                       <IconButton color="info" size="small" onClick={() => handleView(index)}>
                         <RemoveRedEyeRoundedIcon fontSize="small" />
                       </IconButton>
-                      <IconButton size="small">
+                      <IconButton size="small" onClick={() => handleEdit(index)}>
                         <EditIcon fontSize="small" />
                       </IconButton>
                       <IconButton color="error" size="small" onClick={() => handleDelete(index)}>
@@ -310,6 +368,16 @@ export const TKPPage = () => {
               </Button>
             </DialogActions>
           </Dialog>
+
+          {/* Form Dialog: Add / Edit */}
+          <TKPFormDialog
+            open={formOpen}
+            mode={formMode}
+            formData={formData}
+            onChange={setFormData}
+            onClose={handleCloseForm}
+            onSave={handleSaveForm}
+          />
         </>
       )}
     </Box>
