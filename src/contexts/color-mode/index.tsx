@@ -1,22 +1,25 @@
 import React, {
   PropsWithChildren,
   createContext,
-  useEffect,
-  useMemo,
   useState,
 } from "react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import { darkTheme, lightTheme } from "../../providers/theme";
+import { darkTheme } from "../../providers/theme";
 
-type ColorMode = "light" | "dark";
+type ColorMode = "dark";
 
 type ColorModeContextType = {
   mode: ColorMode;
+  setMode: (_mode: ColorMode) => void;
   toggleColorMode: () => void;
 };
 
 export const ColorModeContext = createContext<ColorModeContextType>(
-  {} as ColorModeContextType
+  {
+    mode: "dark",
+    setMode: () => undefined,
+    toggleColorMode: () => undefined,
+  }
 );
 
 export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
@@ -24,39 +27,17 @@ export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({
 }) => {
   const [mode, setMode] = useState<ColorMode>("dark");
 
-  // 🔹 Init mode (client only)
-  useEffect(() => {
-    const storedMode = localStorage.getItem("colorMode") as ColorMode | null;
-
-    if (storedMode) {
-      setMode(storedMode);
-    } else {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setMode(prefersDark ? "dark" : "light");
-    }
-  }, []);
-
-  // 🔹 Persist to localStorage
-  useEffect(() => {
-    localStorage.setItem("colorMode", mode);
-  }, [mode]);
-
-  const toggleColorMode = () => {
-    setMode((prev) => (prev === "light" ? "dark" : "light"));
+  const handleSetMode = (_mode: ColorMode) => {
+    setMode("dark");
   };
 
-  const theme = useMemo(
-    () =>
-      mode === "light"
-        ? lightTheme : darkTheme,
-    [mode]
-  );
+  const toggleColorMode = () => {
+    setMode("dark");
+  };
 
   return (
-    <ColorModeContext.Provider value={{ mode, toggleColorMode }}>
-      <ThemeProvider theme={theme}>
+    <ColorModeContext.Provider value={{ mode, setMode: handleSetMode, toggleColorMode }}>
+      <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         {children}
       </ThemeProvider>

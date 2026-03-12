@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import RemoveRedEyeRoundedIcon from '@mui/icons-material/RemoveRedEyeRounded';
 import {
   Box,
   Button,
@@ -126,7 +127,7 @@ export const TIUPage = () => {
     alert("Tambah soal belum diimplementasikan.");
   };
 
-  const handleEdit = (index: number) => {
+  const handleView = (index: number) => {
     const selected = visibleQuestions[index];
     if (!selected) {
       return;
@@ -188,10 +189,10 @@ export const TIUPage = () => {
             <Table>
                 <TableHead sx={{ backgroundColor: "primary.main" }}>
                 <TableRow>
-                  <TableCell sx={{ width: 50, fontWeight: 700 }}>No</TableCell>
-                  <TableCell sx={{ fontWeight: 700 }}>Soal</TableCell>
-                  <TableCell sx={{ width: 100, fontWeight: 700 }}>Jawaban</TableCell>
-                  <TableCell align="center" sx={{ width: 120, fontWeight: 700 }}>
+                  <TableCell sx={{ width: 50, fontWeight: 700, color: "background.default" }}>No</TableCell>
+                  <TableCell sx={{ fontWeight: 700, color: "background.default"  }}>Soal</TableCell>
+                  <TableCell sx={{ width: 100, fontWeight: 700, color: "background.default"  }}>Jawaban</TableCell>
+                  <TableCell align="center" sx={{ width: 150, fontWeight: 700, color: "background.default"  }}>
                     Action
                   </TableCell>
                 </TableRow>
@@ -203,7 +204,10 @@ export const TIUPage = () => {
                     <TableCell>{getQuestionText(item.question)}</TableCell>
                     <TableCell align="center">{item.answer ?? "-"}</TableCell>
                     <TableCell align="center">
-                      <IconButton size="small" onClick={() => handleEdit(index)}>
+                      <IconButton color="info" size="small" onClick={() => handleView(index)}>
+                        <RemoveRedEyeRoundedIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton size="small">
                         <EditIcon fontSize="small" />
                       </IconButton>
                       <IconButton color="error" size="small" onClick={() => handleDelete(index)}>

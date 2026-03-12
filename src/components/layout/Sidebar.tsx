@@ -1,9 +1,7 @@
-import DarkModeOutlined from "@mui/icons-material/DarkModeOutlined";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import LightModeOutlined from "@mui/icons-material/LightModeOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
@@ -17,15 +15,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import { useGo, useLogout } from "@refinedev/core";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useLocation } from "react-router";
-import { ColorModeContext } from "../../contexts/color-mode";
 const drawerWidth = 280;
 
 export const CustomSidebar = () => {
   const go = useGo();
   const location = useLocation();
-  const { mode, toggleColorMode } = useContext(ColorModeContext);
   const { mutate: logout } = useLogout();
   const [bankSoalOpen, setBankSoalOpen] = useState(
     location.pathname.startsWith("/banksoal")
@@ -67,7 +63,7 @@ export const CustomSidebar = () => {
         "& .MuiDrawer-paper": {
           width: drawerWidth,
           boxSizing: "border-box",
-          bgcolor: mode === "dark" ? "#1e1e1e" : "#f5f5f5",
+          bgcolor: "background.paper",
         },
       }}
     >
@@ -83,74 +79,9 @@ export const CustomSidebar = () => {
         }}
       >
         <HomeOutlinedIcon sx={{ fontSize: 32, color: "primary.main" }} />
-        <Typography fontWeight="bold">
+        <Typography fontWeight="bold" color="primary.main">
           CPNS Bank Soal
         </Typography>
-      </Box>
-
-      {/* Theme Toggle */}
-      <Box sx={{ p: 2 }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            bgcolor: mode === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)",
-            borderRadius: 3,
-            p: 0.5,
-            position: "relative",
-            cursor: "pointer",
-          }}
-          onClick={toggleColorMode}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              width: "50%",
-              height: "calc(100% - 8px)",
-              bgcolor: "primary.main",
-              borderRadius: 2.5,
-              transition: "transform 0.3s ease",
-              transform: mode === "dark" ? "translateX(0)" : "translateX(100%)",
-              left: 4,
-            }}
-          />
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 0.5,
-              py: 1,
-              zIndex: 1,
-              color: mode === "dark" ? "white" : "text.secondary",
-              transition: "color 0.3s ease",
-            }}
-          >
-            <DarkModeOutlined sx={{ fontSize: 18 }} />
-            <Typography variant="caption" fontWeight={600}>
-              Dark
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              flex: 1,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 0.5,
-              py: 1,
-              zIndex: 1,
-              color: mode === "light" ? "white" : "text.secondary",
-              transition: "color 0.3s ease",
-            }}
-          >
-            <LightModeOutlined sx={{ fontSize: 18 }} />
-            <Typography variant="caption" fontWeight={600}>
-              Light
-            </Typography>
-          </Box>
-        </Box>
       </Box>
 
       {/* Menu Items */}
@@ -177,18 +108,23 @@ export const CustomSidebar = () => {
                 mx: 1,
                 mb: 0.5,
                 borderRadius: 1,
+                color: "text.primary",
                 "&:hover": {
-                  bgcolor: mode === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)",
+                  bgcolor: "action.hover",
                 },
                 "&.Mui-selected": {
                   bgcolor: "primary.main",
+                  color: "#000",
+                  "& .MuiListItemIcon-root": {
+                    color: "#000",
+                  },
                   "&:hover": {
                     bgcolor: "primary.dark",
                   },
                 },
               }}
             >
-              <ListItemIcon sx={{ minWidth: 40, color: "text.primary" }}>
+              <ListItemIcon sx={{ minWidth: 40, color: "inherit" }}>
                 {item.icon}
               </ListItemIcon>
               <ListItemText
@@ -216,11 +152,13 @@ export const CustomSidebar = () => {
                         mx: 1,
                         mb: 0.4,
                         borderRadius: 1,
+                        color: "text.primary",
                         "&:hover": {
-                          bgcolor: mode === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)",
+                          bgcolor: "action.hover",
                         },
                         "&.Mui-selected": {
                           bgcolor: "primary.main",
+                          color: "background.default",
                           "&:hover": {
                             bgcolor: "primary.dark",
                           },

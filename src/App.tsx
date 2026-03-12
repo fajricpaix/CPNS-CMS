@@ -15,6 +15,7 @@ import { ColorModeContextProvider } from "./contexts/color-mode";
 import { dataProvider } from "./providers/data";
 import { CustomSidebar } from "./components/layout/Sidebar";
 import { TIUPage } from "./pages/banksoal/tiu";
+import { TWKPage } from "./pages/banksoal/twk";
 
 const Screen = ({ title }: { title: string }) => (
   <Box sx={{ p: 4 }}>
@@ -53,7 +54,7 @@ function App() {
                       <Route path="/banksoal" element={<Screen title="Bank Soal" />} />
                       <Route path="/banksoal/tkp" element={<Screen title="TKP" />} />
                       <Route path="/banksoal/tiu" element={<TIUPage />} />
-                      <Route path="/banksoal/twk" element={<Screen title="TWK" />} />
+                      <Route path="/banksoal/twk" element={<TWKPage />} />
                       <Route path="/member-management" element={<Screen title="Member Management" />} />
                     </Routes>
                   </Box>
